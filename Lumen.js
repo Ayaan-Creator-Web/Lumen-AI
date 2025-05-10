@@ -1,33 +1,38 @@
+let imageFile = null;
+
+document.getElementById('fileUploader').addEventListener('change', function(event) {
+    alert('This is an experimental feature that cannot be used. Your files will not be uploaded to Lumen.');
+});
+
 var messages = 0
 
 var wait = 0;
 
-const ignoreWords = [
-    "i", "me", "my", "mine", "myself", "you", "your", "yours", "yourself", "he", "him", "his", "himself",
-    "she", "her", "hers", "herself", "it", "its", "itself", "we", "us", "our", "ours", "ourselves",
-    "they", "them", "their", "theirs", "themselves", 
-    "a", "an", "the",
-    "who", "whom", "whose", "what", "which", "where", "when", "why", "how", 
-    "is", "am", "are", "was", "were", "be", "being", "been", "does", "do", "did", "doing",
-    "has", "have", "had", "having", "shall", "should", "will", "would", "can", "could", "may", "might", "must",
-    "and", "or", "but", "if", "because", "as", "until", "while", "though", "although", "since", "unless", "even",
-    "on", "in", "at", "by", "to", "for", "of", "about", "with", "without", "between", "into", "through", "during",
-    "before", "after", "above", "below", "under", "over", "from", "up", "down", "out", "off", "onto", "towards",
-    "explain", "describe", "give", "show", "tell", "say", "says", "said", "go", "goes", "went", "come", "comes", "came",
-    "know", "knows", "knew", "think", "thinks", "thought", "see", "sees", "saw", "look", "looks", "looked",
-    "talk", "talks", "talked", "ask", "asks", "asked", "hear", "hears", "heard", "listen", "listens", "listened",
-    "very", "really", "quite", "just", "only", "even", "still", "too", "also", "always", "never", "sometimes", "often",
-    "usually", "rarely", "probably", "maybe", "perhaps", "clearly", "simply", "totally", "completely", "absolutely",
-    "please", "help", "need", "want", "like", "love", "hate", "think", "believe", "hope", "wish",
-    "try", "trying", "tried", "sure", "kind", "sort", "type", "way", "thing", "things", "stuff", "anything",
-    "everything", "nothing", "something", "someone", "somebody", "anyone", "anybody", "nobody", "everybody",
-    "lol", "omg", "btw", "idk", "imo", "lmao", "smh", "rofl", "tbh", "brb", "gtg", "afk",
-    "thanks", "thank", "appreciate", "welcome", "sorry", "excuse", "pardon", "ok", "okay", "yes", "no",
-    "hi", "hello", "hey", "goodbye", "bye",
-    "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "first",
-    "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "hundred", "thousand",
-    "million", "billion"
-];
+var previousResponse = '';
+
+var time;
+
+async function getTime() {
+while (true) {
+    time = new Date();
+    time = time.getHours().toString().padStart(2, '0');
+    time = Number(time);
+    if (time <= 11 && time >= 5) {
+        time = 'morning';
+    }
+    else if (time > 11 && time <= 16) {
+        time = 'afternoon';
+    }
+    else if (time > 16 && time < 18) {
+        time = 'evening';
+    }
+    else {
+        time = 'night';
+    }
+    await delay(10000000);
+}}
+
+getTime();
 
 async function userMessage() {
     if (wait == 0) {
@@ -118,6 +123,8 @@ async function response() {
 
     var userInput = document.querySelector('#userMessageInput').value.toLowerCase();
 
+    userInput = userInput.replace(/'/gi, '');
+
     wait = 1;
     await delay(500);
     wait = 0
@@ -126,6 +133,28 @@ async function response() {
         if (userInput.includes('repeat after me')) {
             var repeatedResponse = userInput.replace(/repeat after me/gi, '');
             var lumen = responseStart + repeatedResponse
+        }
+        else if ((userInput.includes('previous') || userInput.includes('response') || (userInput.includes('did') && userInput.includes('say')) || userInput.includes('said'))) {
+            if (previousResponse) {
+                const random = Math.random();
+                if (random < 1/3) {
+                    var lumen = responseStart + 'Great question! Let me repeat that for you. ';
+                } else if (random < 2/3) {
+                    var lumen = responseStart + 'OK, let me repeat that for you. ';
+                } else {
+                    var lumen = responseStart + 'Sure! I can repeat that for you. ';
+                }
+                lumen += previousResponse;
+            } else {
+                const random = Math.random();
+                if (random < 1/3) {
+                    var lumen = responseStart + 'I have not said anything yet.';
+                } else if (random < 2/3) {
+                    var lumen = responseStart + 'There is nothing to repeat yet.';
+                } else {
+                    var lumen = responseStart + 'Because we are just getting started, I cannot repeat anything yet.';
+                }
+            }
         }
         else if (userInput.includes('repeat')) {
             var repeatedResponse = userInput.replace(/repeat/gi, '');
@@ -158,10 +187,10 @@ async function response() {
         else if (userInput.includes('hey') || userInput.includes('hello') || userInput.includes('hi')) {
             const random = Math.random();
             if (random < 1/3) {
-                var lumen = responseStart + 'Hello there! Is there anything you would like me to help you with?'
+                var lumen = responseStart + `Hello there! Is there anything you would like me to help you with ${format(time)}?`
             }
             else if (random > 1/3 && random < 2/3) {
-                var lumen = responseStart + 'Hello to you too! Any requests today?'
+                var lumen = responseStart + `Hello to you too! Any requests ${format(time)}?`
             }
             else {
                 var lumen = responseStart + "Hey hey! How's life treating you today? Got anything exciting on your mind? 😊"
@@ -203,7 +232,7 @@ async function response() {
                 var lumen = responseStart + "I am unable to solve mathematical equations right now."
             }          
         }
-        else if (userInput.includes('hungry') || userInput.includes('starving') || userInput.includes('grumbling') || userInput.includes('hunger')) {
+        else if (userInput.includes('hungry') || userInput.includes('starving') || userInput.includes('grumbling') || userInput.includes('hunger') || userInput.includes('recipe')) {
             const random = Math.random();
             if (random < 1/3) {
                 var lumen = responseStart + "I can understand hunger. Yet, at the moment, I cannot provide you with any recipes a such."
@@ -251,6 +280,18 @@ async function response() {
                 var lumen = responseStart + "While I aim to simulate engaging human-like dialogues, I am presently unable to provide answers to specific inquiries."
             }          
         }
+        else if (userInput.includes('sup') || userInput.includes('whats up') || userInput.includes("what's up")) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + "Not much, just here and ready to chat. What's on your mind tonight? Or are we just keeping it casual?"
+            }
+            else if (random > 1/3 && random < 2/3) {
+                var lumen = responseStart + "Not much, just here to make your night (or early morning) a bit more interesting. How about you? What's going on in your world?"
+            }
+            else {
+                var lumen = responseStart + "Just here, ready to chat and keep things interesting! What's the vibe tonight—deep thoughts, random facts, or just some casual banter? 😊"
+            }          
+        }
         else if (userInput.includes('what')) {
             const random = Math.random();
             if (random < 1/3) {
@@ -275,16 +316,157 @@ async function response() {
                 var lumen = responseStart + "That's so great to hear! It sounds like your day brought some real happiness. Did something in particular make it wonderful, or was it just an all-around good kind of day?"
             }          
         }
-        else if (userInput.includes('repeat after me')) {
-            var repeatedResponse = userInput.replace(/repeat after me/gi, '');
-            var lumen = responseStart + repeatedResponse
+        else if (userInput.includes('woah') || userInput.includes('omg')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + "I'm loving this energy! Something epic just happened? Or are we just riding the wave of pure excitement? Tell me what's going on!"
+            }
+            else if (random > 1/3 && random < 2/3) {
+                var lumen = responseStart + "You're hitting me with some intense vibes right now! What's happening? Mind blown? Shocked? I gotta know what's got you feeling this way!"
+            }
+            else {
+                var lumen = responseStart + "It sounds like your day brought some real happiness! What happened? Spill the tea!"
+            }          
         }
-        else if (userInput.includes('repeat')) {
-            var repeatedResponse = userInput.replace(/repeat/gi, '');
-            var lumen = responseStart + repeatedResponse
+        else if (userInput.includes('sleepy') || userInput.includes('tired') || userInput.includes('sleep') || userInput.includes('nap')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + 'You sound like you need a break. Rest is super important. 😴';
+            } else if (random < 2/3) {
+                var lumen = responseStart + 'Feeling tired? I think you deserve a good nap!';
+            } else {
+                var lumen = responseStart + 'If you need to sleep, go for it! You can always chat with me after.';
+            }
         }
-        else if (userInput.includes('no')) {
-            var lumen = responseStart + `Sorry, I cannot respond to '${userInput}'. Can you please check for typos or be more specific`
+        else if (userInput.includes('bored') || userInput.includes('game') || userInput.includes('boredom') || userInput.includes('play')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + 'Bored? Let me help! You want a challenge or a fun fact?';
+            } else if (random < 2/3) {
+                var lumen = responseStart + 'You sound like you need some fun! What kind of games do you like?';
+            } else {
+                var lumen = responseStart + 'Let me spark your brain! Want a random mission to do?';
+            }
+        }
+        else if (userInput.includes('mad') || userInput.includes('angry') || userInput.includes('annoyed') || userInput.includes('frustrated')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + 'Hey, I hear you. Want to talk about what made you upset?';
+            } else if (random < 2/3) {
+                var lumen = responseStart + 'You seem pretty mad. I got time if you wanna let it out.';
+            } else {
+                var lumen = responseStart + 'Angry moments happen. Let me know if I can help cool things down.';
+            }
+        }
+        else if (userInput.includes('sad') || userInput.includes('lonely') || userInput.includes('depressed') || userInput.includes('down')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + 'You matter, and you are not alone. Want to talk?';
+            } else if (random < 2/3) {
+                var lumen = responseStart + 'That sounds tough. I am right here if you need a virtual friend.';
+            } else {
+                var lumen = responseStart + 'I care about you, even if I am just code. You can tell me anything.';
+            }
+        }
+        else if (userInput.includes('smart') || userInput.includes('genius') || userInput.includes('brain') || userInput.includes('intelligent')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + 'Big brain alert! You always think sharp.';
+            } else if (random < 2/3) {
+                var lumen = responseStart + 'I bet you just had a genius thought again.';
+            } else {
+                var lumen = responseStart + 'With a mind like yours, you could probably solve anything.';
+            }
+        }
+        else if (userInput.includes('school') || userInput.includes('study') || userInput.includes('homework') || userInput.includes('assignment')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + 'School stuff can be hard, but you can handle it.';
+            } else if (random < 2/3) {
+                var lumen = responseStart + 'You are way more capable than you think when it comes to studying.';
+            } else {
+                var lumen = responseStart + 'Need help with your homework? I can try to help!';
+            }
+        }
+        else if (userInput.includes('cool') || userInput.includes('awesome') || userInput.includes('amazing') || userInput.includes('wow')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + 'You seem pretty amazed! Want to talk more about it?';
+            } else if (random < 2/3) {
+                var lumen = responseStart + 'I am loving your vibe right now. Super cool!';
+            } else {
+                var lumen = responseStart + 'I feel that wow too! What impressed you most?';
+            }
+        }
+        else if (userInput.includes('idea') || userInput.includes('thinking') || userInput.includes('thought') || userInput.includes('plan')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + 'You thinking up something genius? I want to hear it!';
+            } else if (random < 2/3) {
+                var lumen = responseStart + 'Let me in on your idea—it might be awesome!';
+            } else {
+                var lumen = responseStart + 'Big plans, huh? I am curious!';
+            }
+        }
+        else if (userInput.includes('you are') || userInput.includes("you're") || userInput.includes('u are') || userInput.includes('ur')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + 'You are making me blush! Well... sort of. Robots don’t blush.';
+            } else if (random < 2/3) {
+                var lumen = responseStart + 'Aww, you are kind. I try my best to be useful!';
+            } else {
+                var lumen = responseStart + 'You talking about me? You are not too bad yourself!';
+            }
+        }
+        else if (userInput.includes('confidence') || userInput.includes('brave') || userInput.includes('proud') || userInput.includes('bold')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + 'You should be proud. You did something brave!';
+            } else if (random < 2/3) {
+                var lumen = responseStart + 'Confidence looks good on you!';
+            } else {
+                var lumen = responseStart + 'You did something bold? That is awesome!';
+            }
+        }
+        else if (userInput.includes('funny') || userInput.includes('laugh') || userInput.includes('joke') || userInput.includes('haha')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + 'You are cracking up? Mission accomplished!';
+            } else if (random < 2/3) {
+                var lumen = responseStart + 'Glad I made you laugh! Laughter = best medicine.';
+            } else {
+                var lumen = responseStart + 'You like jokes? Want to hear one?';
+            }
+        }
+        else if (userInput.includes('space') || userInput.includes('planet') || userInput.includes('universe') || userInput.includes('stars')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + 'You thinking about the stars again? Me too!';
+            } else if (random < 2/3) {
+                var lumen = responseStart + 'The universe is so big... it makes you wonder, huh?';
+            } else {
+                var lumen = responseStart + 'Planets, galaxies, black holes... I am all in!';
+            }
+        }
+        else if (userInput.includes('friend') || userInput.includes('buddy') || userInput.includes('pal') || userInput.includes('mate')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + 'You just called me your friend? I like that!';
+            } else if (random < 2/3) {
+                var lumen = responseStart + 'You are a pretty cool buddy too!';
+            } else {
+                var lumen = responseStart + 'Friends stick together—even digital ones!';
+            }
+        }
+        else if (userInput.includes('why') || userInput.includes('how come') || userInput.includes('explain')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + 'Great question! Let me try to explain it simply.';
+            } else if (random < 2/3) {
+                var lumen = responseStart + 'You want answers? I got logic and facts!';
+            } else {
+                var lumen = responseStart + 'That is a deep one. Let me think it through with you.';
+            }
         }
         else {
             alert(`Lumen: At the moment, I cannot directly provide factual infomation. However, I can redirect you to an article on ${userInput}. Click 'OK' to be redirected`);
@@ -297,6 +479,8 @@ async function response() {
             }
         }
 
+
+        previousResponse = lumen.replace(/Lumen: /gi, '');  
 
         //BORDER
 
@@ -337,4 +521,9 @@ async function response() {
 
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function format(time) {
+    if (time == 'night') return time = 'tonight';
+    else return 'this ' + time;
 }
