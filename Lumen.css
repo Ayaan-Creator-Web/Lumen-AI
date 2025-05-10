@@ -28,21 +28,6 @@ body {
     font-weight: 500;
 }
 
-#userMessageInput {
-    position: fixed;
-    bottom: 30px;  /* Distance from the bottom */
-    left: 50%;
-    transform: translateX(-50%);  /* Centers it horizontally */
-    width: 40%;  /* Adjust width as needed */
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    background-color: #333;  /* Match your dark theme */
-    color: white;
-    outline: none;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-}
-
 .userMessage {
     display: block;
     background-color: #444; /* Adjust color to match your design */
@@ -64,9 +49,76 @@ body {
     padding: 15px;
     border-radius: 15px;
     max-width: 60%;
-    text-align: left;
+    /*text-align: left;*/
     margin-right: auto; /* Pushes the message to the left */
     margin-left: 10px; /* Space from the left edge */
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     width: 600px
+}
+
+.input-box-container {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 45%;
+    background-color: #222;
+    border: 2px solid #888;
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+}
+
+#userMessageInput {
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #333;
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+.input-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#fileUploader {
+    padding: 6px 10px;
+    font-size: 13px;
+    border: none;
+    border-radius: 6px;
+    background-color: #555;
+    color: white;   
+    cursor: pointer;
+}
+
+#sendButton {
+    padding: 6px 14px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#sendButton:hover {
+    background-color: #0056b3;
+}
+
+.messageImage {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
