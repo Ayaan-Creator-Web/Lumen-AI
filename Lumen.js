@@ -163,13 +163,37 @@ async function response() {
         else if (userInput.includes('lol') || userInput.includes('laugh out loud') || userInput.includes('lmao') || userInput.includes('funny') || userInput.includes('laugh')) {
             const random = Math.random();
             if (random < 1/3) {
-                var lumen = responseStart + "You caught me off guard there! What's tickling your funny bone this morning? Let's keep the laughs going."
+                var lumen = responseStart + `You caught me off guard there! What's tickling your funny bone ${format(time)}? Let's keep the laughs going.`
             }
             else if (random > 1/3 && random < 2/3) {
                 var lumen = responseStart + "You're definitely in a good mood today! I love the energy—what's next on our fun agenda?"
             }
             else {
                 var lumen = responseStart + "You're absolutely hilarious! Your sense of humor is on fire today—keep it coming!"
+            }
+        }
+        else if (userInput.includes('ok') || userInput.includes('kay')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + "That's cool! If you have any questions or need help, just let me know!"
+            }
+            else if (random > 1/3 && random < 2/3) {
+                var lumen = responseStart + "Yes, that's great! If you have any questions or need help, just let me know!"
+            }
+            else {
+                var lumen = responseStart + "Great! If you have any questions or need help, just let me know!"
+            }
+        }
+        else if (userInput.includes('idk') || userInput.includes('know') || userInput.includes("don't know") || (userInput.includes('not') && userInput.includes('know'))) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + "That's okay! We all have those moments. If you want to share more, I'm all ears. Or if you need help figuring something out, just let me know!"
+            }
+            else if (random > 1/3 && random < 2/3) {
+                var lumen = responseStart + "That's totally fine! We all have those moments. If you want to share more, I'm all ears. Or if you need help figuring something out, just let me know!"
+            }
+            else {
+                var lumen = responseStart + "Absolutely no problem! If you need help figuring something out, just let me know!"
             }
         }
         else if (userInput.includes('dont like') || userInput.includes("don't like") || userInput.includes('dontlike') || userInput.includes('no like') || userInput.includes('not like') || userInput.includes('stupid')) {
@@ -283,10 +307,10 @@ async function response() {
         else if (userInput.includes('sup') || userInput.includes('whats up') || userInput.includes("what's up")) {
             const random = Math.random();
             if (random < 1/3) {
-                var lumen = responseStart + "Not much, just here and ready to chat. What's on your mind tonight? Or are we just keeping it casual?"
+                var lumen = responseStart + `Not much, just here and ready to chat. What's on your mind ${format(time)}? Or are we just keeping it casual?`
             }
             else if (random > 1/3 && random < 2/3) {
-                var lumen = responseStart + "Not much, just here to make your night (or early morning) a bit more interesting. How about you? What's going on in your world?"
+                var lumen = responseStart + `Not much, just here to make your ${time} a bit more interesting. How about you? What's going on in your world?`
             }
             else {
                 var lumen = responseStart + "Just here, ready to chat and keep things interesting! What's the vibe tonight—deep thoughts, random facts, or just some casual banter? 😊"
@@ -314,6 +338,18 @@ async function response() {
             }
             else {
                 var lumen = responseStart + "That's so great to hear! It sounds like your day brought some real happiness. Did something in particular make it wonderful, or was it just an all-around good kind of day?"
+            }          
+        }
+        else if (userInput.includes('bro') || userInput.includes('nah') || userInput.includes('bruh') || userInput.includes('dude')) {
+            const random = Math.random();
+            if (random < 1/3) {
+                var lumen = responseStart + "lol, I get it! Sometimes you just gotta let it out. What's on your mind? I'm all ears!"
+            }
+            else if (random > 1/3 && random < 2/3) {
+                var lumen = responseStart + "haha, I feel you! Sometimes you just gotta vent. What's going on? I'm here to listen!"
+            }
+            else {
+                var lumen = responseStart + "bro nah, I get it! Sometimes you just gotta let it out. What's on your mind? I'm all ears!"
             }          
         }
         else if (userInput.includes('woah') || userInput.includes('omg')) {
